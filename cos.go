@@ -85,6 +85,7 @@ type Bucket struct {
 }
 
 // Dir 根据目录名称返回Bucket下的目录结构体
+//  支持多级目录；如果目录名称为空，则表示Bucket的根目录
 func (b Bucket) Dir(name string) Dir {
 	return Dir{b, name}
 }
@@ -198,6 +199,7 @@ type Dir struct {
 }
 
 // File 根据文件名称返回目录下的文件结构体
+//  文件名称不能为空
 func (d Dir) File(name string) File {
 	return File{d, name}
 }
@@ -359,7 +361,7 @@ func (d Dir) Name() string {
 	return ""
 }
 
-// Sign 根据seconds过期秒数返回多次(大于0时)签名或目录的单次(小于等于0时)签名
+// Sign 根据seconds过期秒数返回目录的多次(大于0时)签名或单次(小于等于0时)签名
 func (d Dir) Sign(seconds int) string {
 	return d.bucket.sign(d.Name(), seconds)
 }
@@ -651,7 +653,7 @@ func (f File) FullName() string {
 	return f.dir.Name() + f.Name()
 }
 
-// Sign 根据seconds过期秒数返回多次(大于0时)签名或文件的单次(小于等于0时)签名
+// Sign 根据seconds过期秒数返回文件的多次(大于0时)签名或单次(小于等于0时)签名
 func (f File) Sign(seconds int) string {
 	return f.dir.bucket.sign(f.FullName(), seconds)
 }

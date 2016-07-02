@@ -613,25 +613,25 @@ type PathInfo struct {
 
 // Stat 查询文件信息
 func (f File) Stat() (*PathInfo, error) {
-	m := make(map[string]string, 9)
+	m := make(map[string]interface{}, 9)
 	err := f.get(f.Sign(SignSeconds), newParams("stat"), &m)
 	if err != nil {
 		return nil, err
 	}
 	data := &PathInfo{
-		AccessURL: m["access_url"],
-		BizAttr:   m["biz_attr"],
-		Ctime:     m["ctime"],
-		Mtime:     m["mtime"],
-		Name:      m["name"],
-		Sha:       m["sha"],
-		SourceURL: m["source_url"],
+		AccessURL: m["access_url"].(string),
+		BizAttr:   m["biz_attr"].(string),
+		Ctime:     m["ctime"].(string),
+		Mtime:     m["mtime"].(string),
+		Name:      m["name"].(string),
+		Sha:       m["sha"].(string),
+		SourceURL: m["source_url"].(string),
 	}
-	data.FileLen, err = strconv.Atoi(m["filelen"])
+	data.FileLen, err = strconv.Atoi(m["filelen"].(string))
 	if err != nil {
 		return nil, err
 	}
-	data.FileSize, err = strconv.Atoi(m["filesize"])
+	data.FileSize, err = strconv.Atoi(m["filesize"].(string))
 	if err != nil {
 		return nil, err
 	}
